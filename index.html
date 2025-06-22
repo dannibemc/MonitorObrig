@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistema de Monitoramento de Obrigações</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#343E83',
+                        secondary: '#32BECB',
+                        tertiary: '#5DACCD',
+                        accent: '#9E36EF',
+                        primaryLight: '#4A5399',
+                        secondaryLight: '#4FD7E3',
+                        tertiaryLight: '#7BBDDA',
+                        accentLight: '#B15EF7'
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f0f4f8;
+        }
+        .card {
+            transition: all 0.3s ease;
+        }
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
+    </style>
+</head>
+<body>
+    <div class="flex h-screen bg-gray-100">
+        <div class="sidebar bg-gradient-to-b from-primary to-primaryLight text-white w-64 space-y-6 py-7 px-2 md:relative md:translate-x-0 transition duration-200 ease-in-out z-20">
+            <div class="flex items-center space-x-2 px-4">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" /></svg>
+                <span class="text-xl font-bold">MonitorObrig</span>
+            </div>
+            <nav>
+                <a href="#" class="nav-link block py-2.5 px-4 rounded transition duration-200 hover:bg-primaryLight" data-tab="dashboard">
+                    <div class="flex items-center space-x-2"><span>Dashboard</span></div>
+                </a>
+            </nav>
+        </div>
+
+        <div class="flex-1 flex flex-col overflow-hidden">
+            <header class="bg-white shadow-sm">
+                 <div class="flex items-center justify-between p-4">
+                    <h1 id="pageTitle" class="text-xl font-semibold text-primary">Dashboard</h1>
+                    <div class="flex items-center space-x-4">
+                        <div class="w-8 h-8 rounded-full bg-primary flex items-center justify-center text-white font-semibold">A</div>
+                        <span class="text-gray-700">Admin</span>
+                    </div>
+                </div>
+             </header>
+
+            <main class="flex-1 overflow-y-auto bg-gray-100 p-4">
+                <div id="dashboard" class="tab-content active">
+                     <div class="grid grid-cols-1 lg:grid-cols-5 gap-6">
+                        
+                        <div class="lg:col-span-2">
+                            <div class="card bg-white rounded-lg shadow p-6">
+                                <h3 class="text-lg font-semibold text-primary mb-4">Adicionar Novo Contrato</h3>
+                                <form id="form-novo-contrato" class="space-y-4">
+                                    <div>
+                                        <label for="contrato-nome" class="block text-sm font-medium text-gray-700">Nome do Contrato</label>
+                                        <input type="text" id="contrato-nome" required class="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-primary focus:border-primary">
+                                    </div>
+                                    <div>
+                                        <label for="contrato-empresa" class="block text-sm font-medium text-gray-700">Empresa</label>
+                                        <input type="text" id="contrato-empresa" required class="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-primary focus:border-primary">
+                                    </div>
+                                    <div>
+                                        <label for="contrato-inicio" class="block text-sm font-medium text-gray-700">Data de Início</label>
+                                        <input type="date" id="contrato-inicio" required class="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-primary focus:border-primary">
+                                    </div>
+                                     <div>
+                                        <label for="contrato-fim" class="block text-sm font-medium text-gray-700">Data de Fim</label>
+                                        <input type="date" id="contrato-fim" required class="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-primary focus:border-primary">
+                                    </div>
+                                    <div>
+                                        <label for="contrato-valor" class="block text-sm font-medium text-gray-700">Valor (R$)</label>
+                                        <input type="text" id="contrato-valor" placeholder="1500,00" required class="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-primary focus:border-primary">
+                                    </div>
+                                    <div>
+                                        <button type="submit" class="w-full bg-primary hover:bg-primaryLight text-white font-bold py-2 px-4 rounded transition duration-200">
+                                            Salvar Contrato
+                                        </button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+
+                        <div class="lg:col-span-3">
+                            <div class="card bg-white rounded-lg shadow p-4">
+                                <h3 class="text-lg font-semibold text-primary mb-4">Contratos Recentes</h3>
+                                <div class="overflow-x-auto">
+                                    <table class="min-w-full divide-y divide-gray-200">
+                                        <thead class="bg-gray-50">
+                                            <tr>
+                                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Contrato</th>
+                                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Data Fim</th>
+                                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="tabela-contratos-body" class="bg-white divide-y divide-gray-200">
+                                            </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+
+                     </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+
+    <script src="script.js"></script>
+</body>
+</html>
