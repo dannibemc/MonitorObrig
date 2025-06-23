@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Sistema de Monitoramento de Obrigações</title>
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+  <style>
+    body { font-family: sans-serif; background-color: #f0f4f8; }
+    .tab-content { display: none; }
+    .tab-content.active { display: block; }
+  </style>
+</head>
+<body class="p-4">
+  <h1 class="text-2xl font-bold mb-4" id="pageTitle">Dashboard</h1>
+
+  <!-- Navegação -->
+  <div class="mb-4">
+    <button class="nav-link bg-blue-500 text-white px-4 py-2 mr-2 rounded" data-tab="dashboard">Dashboard</button>
+    <button class="nav-link bg-gray-300 px-4 py-2 mr-2 rounded" data-tab="contratos">Contratos</button>
+  </div>
+
+  <!-- Dashboard -->
+  <div id="dashboard" class="tab-content active">
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+      <div class="card bg-white p-4 rounded shadow"><h2>Total Contratos</h2><h3 class="text-xl">0</h3></div>
+      <div class="card bg-white p-4 rounded shadow"><h2>Total Obrigações</h2><h3 class="text-xl">0</h3></div>
+      <div class="card bg-white p-4 rounded shadow"><h2>Alertas</h2><h3 class="text-xl">0</h3></div>
+    </div>
+    <canvas id="obligationsChart" height="150"></canvas>
+  </div>
+
+  <!-- Contratos -->
+  <div id="contratos" class="tab-content">
+    <h2 class="text-xl font-semibold mb-4">Adicionar Contrato</h2>
+    <input id="nome" placeholder="Nome do contrato" class="border p-2 mb-2 block w-full"/>
+    <input id="empresa" placeholder="Empresa" class="border p-2 mb-2 block w-full"/>
+    <input id="data_inicio" type="date" class="border p-2 mb-2 block w-full"/>
+    <button id="btnSalvar" class="bg-green-500 text-white px-4 py-2 rounded">Processar Contrato</button>
+  </div>
+
+  <!-- Firebase compatível -->
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
+  <script>
+    const firebaseConfig = {
+      apiKey: "AIzaSyA5fjInhHn8fIXUr5oho-REt9mVPz4LtT4",
+      authDomain: "monitorobrig.firebaseapp.com",
+      projectId: "monitorobrig",
+      storageBucket: "monitorobrig.firebasestorage.app",
+      messagingSenderId: "883420122335",
+      appId: "1:883420122335:web:dce66a89889ad64bdfed6a",
+      measurementId: "G-E063C7FYXR"
+    };
+    firebase.initializeApp(firebaseConfig);
+    window.firebaseDB = firebase.firestore();
+  </script>
+
+  <script src="script.js"></script>
+</body>
+</html>
